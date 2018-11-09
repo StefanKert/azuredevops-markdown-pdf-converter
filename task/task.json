@@ -1,0 +1,41 @@
+{
+  "id": "50dad1f2-3da6-402b-9839-631c1736aba9",
+  "name": "markdownpdfconverter",
+  "friendlyName": "Markdown Pdf Converter",
+  "description": "Task for creationg pdf for markdown files.",
+  "author": "Stefan Kert",
+  "helpMarkDown": "[More Information](https://github.com/StefanKert/azuredevops-markdown-pdf-converter#readme)",
+  "category": "Utility",
+  "visibility": ["Build"],
+  "demands": [],
+  "version": {
+    "Major": "0",
+    "Minor": "0",
+    "Patch": "0"
+  },
+  "minimumAgentVersion": "2.116.0",
+  "instanceNameFormat": "Markdown Pdf Converter $(mdfilename) -> $(pdffilename)",
+  "inputs": [
+    {
+      "name": "mdfilename",
+      "type": "string",
+      "label": "Markdownfile to convert",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "The file that should be converted to pdf."
+    },
+    {
+      "name": "pdffilename",
+      "type": "string",
+      "label": "Output Filename (PDF)",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "The filepath that is used for the export file."
+    }
+  ],
+  "execution": {
+    "Node": {
+      "target": "index.js"
+    }
+  }
+}

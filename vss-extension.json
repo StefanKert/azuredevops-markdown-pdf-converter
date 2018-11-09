@@ -1,0 +1,66 @@
+{
+    "manifestVersion": 1,
+    "id": "markdownpdfconverter",
+    "name": "Markdown PDF Converter",
+    "version": "0.0.0",
+    "public": true,
+    "publisher": "stefankert",
+    "targets": [
+        {
+            "id": "Microsoft.VisualStudio.Services"
+        }
+    ],
+    "description": "Task for creationg pdf for markdown files.",
+    "categories": [
+        "Build and release"
+    ],
+    "galleryFlags": [],
+    "tags": [
+        "build"
+    ],
+    "links": {
+        "support": {
+            "uri": "https://github.com/StefanKert/azuredevops-markdown-pdf-converter/issues"
+        }
+    },
+    "icons": {
+        "default": "images/extension-icon.png"
+    },
+    "branding": {
+        "color": "#028c7e",
+        "theme": "dark"
+    },
+    "repository": {
+        "type": "git",
+        "uri": "https://github.com/StefanKert/azuredevops-markdown-pdf-converter"
+    },
+    "content": {
+        "details": {
+            "path": "README.md"
+        },
+        "license": {
+            "path": "LICENSE"
+        }
+    },
+    "files": [
+        {
+            "path": "task"
+        },
+        {
+            "path": "images",
+            "addressable": true
+        }
+    ],
+    "contributions": [
+        {
+            "id": "codesigning-task",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "task"
+            }
+        }
+    ]
+}
