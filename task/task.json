@@ -31,6 +31,13 @@
       "defaultValue": "",
       "required": true,
       "helpMarkDown": "The filepath that is used for the export file."
+    },
+    {
+      "name": "generatetoc",
+      "type": "boolean",
+      "label": "Generate table of contents",
+      "defaultValue": "",
+      "required": false
     }
   ],
   "execution": {
