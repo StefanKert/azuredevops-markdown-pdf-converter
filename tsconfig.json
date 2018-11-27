@@ -8,9 +8,6 @@
     "experimentalDecorators": true,
     "removeComments": false,
     "noImplicitAny": false,
-    "types": [
-      "react",
-    ]
-  },
-  "exclude": ["node_modules"]
+    "types": ["react", "node", "mocha" ]
+  }
 }

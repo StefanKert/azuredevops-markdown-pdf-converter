@@ -64,3 +64,4 @@ typings/
 _build
 _packages
 task/.taskkey
+task/tests/TestFile_tmp.html
