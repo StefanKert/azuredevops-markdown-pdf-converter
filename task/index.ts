@@ -11,6 +11,8 @@ async function run(): Promise<void> {
     tl.setResourcePath(path.join(__dirname, "task.json"));
     const mdfilename: string = tl.getInput("mdfilename", true);
     const pdffilename: string = tl.getInput("pdffilename", true);
+    const covertitle: string = tl.getInput("covertitle", false);
+    const version: string = tl.getInput("version", false);
     const generatetoc: boolean = tl.getBoolInput("generatetoc", false);
     const mergeReferencedMarkdownFiles: boolean = tl.getBoolInput(
       "mergeReferencedMarkdownFiles",
@@ -58,9 +60,9 @@ ${fs.readFileSync(filePath, "utf-8")}
         }
       });
       let mergedContent: string = contents.join(os.EOL);
-      await converter.executeExport(mdfilename, mergedContent, pdffilename);
+      await converter.executeExport(mdfilename, mergedContent, pdffilename, covertitle, version);
     } else {
-      await converter.executeExportForFile(mdfilename, pdffilename);
+      await converter.executeExportForFile(mdfilename, pdffilename, covertitle, version);
     }
   } catch (err) {
     console.error(err);

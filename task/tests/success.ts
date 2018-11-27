@@ -5,7 +5,9 @@ import path = require("path");
 let taskPath: string = path.join(__dirname, "..", "index.js");
 let tmr: tmrm.TaskMockRunner = new tmrm.TaskMockRunner(taskPath);
 
-tmr.setInput("mdfilename", "task/tests/TestFile.md");
-tmr.setInput("pdffilename", "task/tests/TestFile.pdf");
+tmr.setInput("mdfilename", path.join(__dirname,"TestFile.md"));
+tmr.setInput("pdffilename", path.join(__dirname,"TestFile.pdf"));
+tmr.setInput("covertitle", "TestCover");
+tmr.setInput("version", "alpha 1");
 
 tmr.run();
