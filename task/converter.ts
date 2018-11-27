@@ -2,7 +2,7 @@ import path = require("path");
 import fs = require("fs");
 import url = require("url");
 import hljs = require("highlight.js");
-import puppeteer = require("puppeteer");
+import puppeteer = require("puppeteer-core");
 import mustache = require("mustache");
 import process = require("process");
 import cheerio = require("cheerio");
@@ -126,9 +126,6 @@ function readStyles(): string {
   style += fs.readFileSync(
     path.join(
       __dirname,
-      "..",
-      "node_modules",
-      "highlight.js",
       "styles",
       "github.css"
     ),
@@ -145,7 +142,9 @@ async function exportPdf(data: string, filename: string): Promise<void> {
   let f: path.ParsedPath = path.parse(filename);
   var tmpfilename: string = path.join(f.dir, f.name + "_tmp.html");
   fs.writeFileSync(tmpfilename, data, "utf-8");
-  let browser: puppeteer.Browser = await puppeteer.launch();
+  let browser: puppeteer.Browser = await puppeteer.launch({
+    executablePath: "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe"
+  });
   let page: puppeteer.Page = await browser.newPage();
   await page.goto(tmpfilename.toString(), { waitUntil: "networkidle0" });
 

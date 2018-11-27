@@ -36,7 +36,14 @@
       "name": "generatetoc",
       "type": "boolean",
       "label": "Generate table of contents",
-      "defaultValue": "",
+      "defaultValue": "false",
+      "required": false
+    },
+    {
+      "name": "mergeReferencedMarkdownFiles",
+      "type": "boolean",
+      "label": "Merge the referenced Markdown documents in the given Markdown file",
+      "defaultValue": "false",
       "required": false
     }
   ],

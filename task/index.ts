@@ -12,12 +12,17 @@ async function run(): Promise<void> {
     const mdfilename: string = tl.getInput("mdfilename", true);
     const pdffilename: string = tl.getInput("pdffilename", true);
     const generatetoc: boolean = tl.getBoolInput("generatetoc", false);
+    const mergeReferencedMarkdownFiles: boolean = tl.getBoolInput(
+      "mergeReferencedMarkdownFiles",
+      false
+    );
 
-    if (mdfilename.endsWith("index.md")) {
+    if (mergeReferencedMarkdownFiles) {
       var indexFileContent: string = fs.readFileSync(mdfilename, "utf-8");
       var baseFolder: string = path.dirname(mdfilename);
       var links: any[] = converter.getLinksFromDocument(indexFileContent);
       var contents: string[] = [];
+
       if (generatetoc) {
         contents.push(`${path.basename(baseFolder)}
 
@@ -26,7 +31,10 @@ async function run(): Promise<void> {
         `);
       } else {
         links.forEach(link => {
-          indexFileContent = indexFileContent.replace(link.href, "#" + link.href);
+          indexFileContent = indexFileContent.replace(
+            link.href,
+            "#" + link.href
+          );
         });
         contents.push(`${indexFileContent}
 <div style="page-break-after: always;"></div>

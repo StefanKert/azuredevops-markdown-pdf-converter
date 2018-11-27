@@ -11,6 +11,7 @@ var merge = require('merge-stream');
 var cp = require('child_process');
 var log = require('fancy-log');
 var PluginError = require('plugin-error');
+var rename = require("gulp-rename");
 
 var _buildRoot = path.join(__dirname, '_build');
 var _packagesRoot = path.join(__dirname, '_packages');
@@ -31,6 +32,11 @@ gulp.task('build', ['clean', 'compile'], function () {
 
     getExternalModules();
 
+    var filePath = path.join(_buildRoot, "/task/node_modules/puppeteer/.local-chromium/win64-599821/chrome-win/First Run");
+    console.log("Trying to delete file");
+    console.log(fs.existsSync(filePath));
+    del(filePath);
+    console.log(fs.existsSync(filePath));
     return merge(extension, task);
 });
 
@@ -63,7 +69,7 @@ gulp.task('upload', ['build'], function () {
     updateExtensionManifest(version, true);
     updateTaskManifest(version);
 
-    shell.exec('tfx build tasks upload --task-path "' + path.join(_buildRoot, 'task'))
+    shell.exec('tfx build tasks upload  --task-path "' + path.join(_buildRoot, 'task'))
 });
 
 getVersion = function () {
@@ -77,12 +83,7 @@ getVersion = function () {
     {
         tag = false;
     }
-    var buildnumber = process.env.APPVEYOR_BUILD_NUMBER;
-    if(!buildnumber) 
-    {
-        var date = new Date();
-        buildnumber = date.getFullYear().toString().slice(-2) + "" + date.getMonth().toString().padStart(2, "0") + "" + date.getDay().toString().padStart(2, "0");
-    }
+
 
     var regex = /[0-9]+.[0-9]+.[0-9]+/
     var versionFilePath = path.join(__dirname, 'appveyor.yml')
@@ -94,6 +95,12 @@ getVersion = function () {
         minor: semverVersion.minor,
         patch: semverVersion.patch
     };
+    var buildnumber = process.env.APPVEYOR_BUILD_NUMBER;
+    if(!buildnumber) 
+    {
+        var date = new Date();
+        buildnumber= date.getFullYear().toString().slice(-2) + ((date.getMonth()) + 1 ).toString().padStart(2, "0")+ date.getDate().toString().padStart(2, "0");
+    }
     console.log("Tag: ", tag);
     console.log("Branch: ", branch);
     console.log("Buildnumber: ", buildnumber);
@@ -178,10 +185,11 @@ updateTaskManifest = function (version) {
     manifest.version.Patch = version.patch;
     manifest.helpMarkDown = 'v' + versionAsText + ' - ' + manifest.helpMarkDown;
 
+    var shortenedVersion = version.major + '.' + version.minor + '.' + version.patch + '-' + version.prerelease;
     if (version.prerelease) {
         manifest.version.Prerelease = version.Patch;
-        manifest.friendlyName = manifest.friendlyName + ' (' + versionAsText + ')';
-        manifest.id = '4df4abb0-38d5-11e8-9466-7fef5455a13d';
+        manifest.friendlyName = manifest.friendlyName + ' (' + shortenedVersion + ')';
+        manifest.id = '6b2c79cc-6383-448d-b94f-805677f14290';
     }
     fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 4));
 }
