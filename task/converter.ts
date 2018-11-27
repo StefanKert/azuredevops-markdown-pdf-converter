@@ -10,7 +10,6 @@ import markdownit = require("markdown-it");
 import Token = require("markdown-it/lib/Token");
 import Renderer = require("markdown-it/lib/Renderer");
 import Remarkable = require("remarkable");
-import { stringify } from "querystring";
 
 const tempFilePath: string = path.join(__dirname, "template", "template.html");
 
