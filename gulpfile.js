@@ -31,12 +31,6 @@ gulp.task('build', ['clean', 'compile'], function () {
         .pipe(gulp.dest(_buildRoot));
 
     getExternalModules();
-
-    var filePath = path.join(_buildRoot, "/task/node_modules/puppeteer/.local-chromium/win64-599821/chrome-win/First Run");
-    console.log("Trying to delete file");
-    console.log(fs.existsSync(filePath));
-    del(filePath);
-    console.log(fs.existsSync(filePath));
     return merge(extension, task);
 });
 
@@ -69,7 +63,7 @@ gulp.task('upload', ['build'], function () {
     updateExtensionManifest(version, true);
     updateTaskManifest(version);
 
-    shell.exec('tfx build tasks upload  --task-path "' + path.join(_buildRoot, 'task'))
+    shell.exec('tfx build tasks upload --task-path "' + path.join(_buildRoot, 'task'))
 });
 
 getVersion = function () {
@@ -83,7 +77,12 @@ getVersion = function () {
     {
         tag = false;
     }
-
+    var buildnumber = process.env.APPVEYOR_BUILD_NUMBER;
+    if(!buildnumber) 
+    {
+        var date = new Date();
+        buildnumber= date.getFullYear().toString().slice(-2) + ((date.getMonth()) + 1 ).toString().padStart(2, "0")+ date.getDate().toString().padStart(2, "0");
+    }
 
     var regex = /[0-9]+.[0-9]+.[0-9]+/
     var versionFilePath = path.join(__dirname, 'appveyor.yml')
@@ -95,12 +94,6 @@ getVersion = function () {
         minor: semverVersion.minor,
         patch: semverVersion.patch
     };
-    var buildnumber = process.env.APPVEYOR_BUILD_NUMBER;
-    if(!buildnumber) 
-    {
-        var date = new Date();
-        buildnumber= date.getFullYear().toString().slice(-2) + ((date.getMonth()) + 1 ).toString().padStart(2, "0")+ date.getDate().toString().padStart(2, "0");
-    }
     console.log("Tag: ", tag);
     console.log("Branch: ", branch);
     console.log("Buildnumber: ", buildnumber);
