@@ -7,7 +7,8 @@ let tmr: tmrm.TaskMockRunner = new tmrm.TaskMockRunner(taskPath);
 
 tmr.setInput("mdfilename", path.join(__dirname,"TestFile.md"));
 tmr.setInput("pdffilename", path.join(__dirname,"TestFile.pdf"));
-tmr.setInput("covertitle", "TestCover");
-tmr.setInput("version", "alpha 1");
+tmr.setInput("covertitle", "");
+tmr.setInput("version", "18332.6013");
+tmr.setInput("repository", "https://dev.azure.com/ouraccount/_git/OurProject");
 
 tmr.run();

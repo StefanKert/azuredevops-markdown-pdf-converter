@@ -13,6 +13,7 @@ async function run(): Promise<void> {
     const pdffilename: string = tl.getInput("pdffilename", true);
     const covertitle: string = tl.getInput("covertitle", false);
     const version: string = tl.getInput("version", false);
+    const repository: string = tl.getInput("repository", false);
     const generatetoc: boolean = tl.getBoolInput("generatetoc", false);
     const mergeReferencedMarkdownFiles: boolean = tl.getBoolInput(
       "mergeReferencedMarkdownFiles",
@@ -60,9 +61,9 @@ ${fs.readFileSync(filePath, "utf-8")}
         }
       });
       let mergedContent: string = contents.join(os.EOL);
-      await converter.executeExport(mdfilename, mergedContent, pdffilename, covertitle, version);
+      await converter.executeExport(mdfilename, mergedContent, pdffilename, covertitle, version, repository);
     } else {
-      await converter.executeExportForFile(mdfilename, pdffilename, covertitle, version);
+      await converter.executeExportForFile(mdfilename, pdffilename, covertitle, version, repository);
     }
   } catch (err) {
     console.error(err);

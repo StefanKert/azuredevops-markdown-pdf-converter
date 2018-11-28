@@ -17,14 +17,17 @@ export async function executeExportForFile(
   mdfilename: string,
   pdffilename: string,
   covertitle?: string,
-  version?: string
+  version?: string,
+  repository?: string
 ): Promise<void> {
   var text: string = fs.readFileSync(mdfilename, "utf8");
   var content: string = convertMarkdownToHtml(mdfilename, text);
 
   if(covertitle && covertitle.length > 0) {
-    content = addCoverPage(content, covertitle, version);
+    content = addCoverPage(content, covertitle, version, repository);
   }
+  else covertitle = "";
+
   var html: string = makeHtml(content, mdfilename);
   await exportPdf(html, pdffilename, covertitle);
 }
@@ -34,14 +37,18 @@ export async function executeExport(
   text: string,
   pdffilename: string,
   covertitle?: string,
-  version?: string
+  version?: string,
+  repository?: string
 ): Promise<void> {
   var content: string = convertMarkdownToHtml(mdfilename, text);
+  
   if(covertitle && covertitle.length > 0) {
-    content = addCoverPage(content, covertitle, version);
+    content = addCoverPage(content, covertitle, version, repository);
   }
+  else covertitle = "";
+  
   var html: string = makeHtml(content, mdfilename);
-  await exportPdf(html, pdffilename);
+  await exportPdf(html, pdffilename, covertitle);
 }
 
 function convertMarkdownToHtml(filename: string, text: string): string {
@@ -91,13 +98,7 @@ function convertMarkdownToHtml(filename: string, text: string): string {
   return md.render(text);
 }
 
-function addCoverPage(data: string, organization: string, buildId?: string): string {
-  var now: Date = new Date();
-  var start: Date = new Date(now.getUTCFullYear(), 0, 0);
-  var diff: number = (now.valueOf() - start.valueOf()) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
-  var oneDay: number = 1000 * 60 * 60 * 24;
-  var dayOfYear: number = Math.floor(diff / oneDay);
-  var version: string = dayOfYear + "." + now.getUTCFullYear()+ "." + buildId;
+function addCoverPage(data: string, title: string, version?: string, repository?: string): string {
 
   var content: string =
   `<div style="position: absolute;
@@ -107,11 +108,17 @@ function addCoverPage(data: string, organization: string, buildId?: string): str
   -webkit-transform: translateX(-50%) translateY(-50%);
   transform: translateX(-50%) translateY(-50%);
   width: 60%";>
-  <span style="font-size: 50px; line-height: 50px; width: 100%; display: inline-block; text-align: center;">` + organization + `</span>
-  <hr>
-  <span style="font-size: 15px; width: 100%;display: inline-block; text-align: center;">` + version +`</span>
-  </div>
-  <div style="page-break-after: always;"></div>`;
+  <span style="font-size: 50px; line-height: 50px; width: 100%; display: inline-block; text-align: center;">` + title + `</span>
+  <hr>`
+  if(repository) {
+    content += '<span style="font-size: 15px; width: 100%;display: inline-block; text-align: center;">' + repository + '</span>';
+  }
+  if(version) {
+    content += '<span style="font-size: 15px; width: 100%;display: inline-block; text-align: center;">' + version + '</span>';
+  }
+  content +=
+  `</div>
+  <div style="page-break-after: always;"></div>;`
 
   content += data;
   return content;
