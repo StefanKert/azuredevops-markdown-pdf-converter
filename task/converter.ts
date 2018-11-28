@@ -15,23 +15,35 @@ const tempFilePath: string = path.join(__dirname, "template", "template.html");
 
 export async function executeExportForFile(
   mdfilename: string,
-  pdffilename: string
+  pdffilename: string,
+  covertitle?: string,
+  version?: string
 ): Promise<void> {
   var text: string = fs.readFileSync(mdfilename, "utf8");
   var content: string = convertMarkdownToHtml(mdfilename, text);
+
+  if(covertitle && covertitle.length > 0) {
+    content = addCoverPage(content, covertitle, version);
+  }
   var html: string = makeHtml(content, mdfilename);
-  await exportPdf(html, pdffilename);
+  await exportPdf(html, pdffilename, covertitle);
 }
 
 export async function executeExport(
   mdfilename: string,
   text: string,
-  pdffilename: string
+  pdffilename: string,
+  covertitle?: string,
+  version?: string
 ): Promise<void> {
   var content: string = convertMarkdownToHtml(mdfilename, text);
+  if(covertitle && covertitle.length > 0) {
+    content = addCoverPage(content, covertitle, version);
+  }
   var html: string = makeHtml(content, mdfilename);
   await exportPdf(html, pdffilename);
 }
+
 function convertMarkdownToHtml(filename: string, text: string): string {
   var md: markdownit = new markdownit({
     html: true,
@@ -77,6 +89,32 @@ function convertMarkdownToHtml(filename: string, text: string): string {
   md.use(require("markdown-it-anchor"));
   md.use(require("markdown-it-table-of-contents"));
   return md.render(text);
+}
+
+function addCoverPage(data: string, organization: string, buildId?: string): string {
+  var now = new Date();
+  var start = new Date(now.getUTCFullYear(), 0, 0);
+  var diff = (now.valueOf() - start.valueOf()) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
+  var oneDay = 1000 * 60 * 60 * 24;
+  var dayOfYear = Math.floor(diff / oneDay);
+  var version: string = dayOfYear + '.' + now.getUTCFullYear()+'.'+ buildId; 
+
+  var content: string = 
+  `<div style="position: absolute;
+  top: 40%;
+  left: 50%;
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  width: 60%";>
+  <span style="font-size: 50px; line-height: 50px; width: 100%; display: inline-block; text-align: center;">` + organization + `</span>
+  <hr>
+  <span style="font-size: 15px; width: 100%;display: inline-block; text-align: center;">` + version +`</span>
+  </div>
+  <div style="page-break-after: always;"></div>`;
+
+  content += data;
+  return content;
 }
 
 function makeHtml(data: string, uri: string): string {
@@ -138,7 +176,7 @@ function readStyles(): string {
   return "\n<style>\n" + style + "\n</style>\n";
 }
 
-async function exportPdf(data: string, filename: string): Promise<void> {
+async function exportPdf(data: string, filename: string, covertitle?: string): Promise<void> {
   let f: path.ParsedPath = path.parse(filename);
   var tmpfilename: string = path.join(f.dir, f.name + "_tmp.html");
   fs.writeFileSync(tmpfilename, data, "utf-8");
@@ -154,7 +192,7 @@ async function exportPdf(data: string, filename: string): Promise<void> {
     displayHeaderFooter: true,
     headerTemplate:
       // tslint:disable-next-line:max-line-length
-      "<div style=\"font-size: 9px; margin-left: 1cm;\"> <span class='title'></span></div> <div style=\"font-size: 9px; margin-left: auto; margin-right: 1cm; \"> <span class='date'></span></div>",
+      "<div style=\"font-size: 9px; margin-left: 1cm;\"> <span>" + covertitle + "</span> </div> <div style=\"font-size: 9px; margin-left: auto; margin-right: 1cm; \"> <span class='date'></span></div>",
     // tslint:disable-next-line:max-line-length
     footerTemplate:
       "<div style=\"font-size: 9px; margin: 0 auto;\"> <span class='pageNumber'></span> / <span class='totalPages'></span></div>",
