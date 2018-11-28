@@ -49,6 +49,14 @@
       "helpMarkDown": "The version of the pdf file. Will be displayed on the cover page if existing."
     },
     {
+      "name": "repository",
+      "type": "string",
+      "label": "Url to the used repository.",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "The repository url from where the markdown files originated."
+    },
+    {
       "name": "generatetoc",
       "type": "boolean",
       "label": "Generate table of contents",
