@@ -33,6 +33,22 @@
       "helpMarkDown": "The filepath that is used for the export file."
     },
     {
+      "name": "covertitle",
+      "type": "string",
+      "label": "Title of cover page",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "The title of the cover page. If not set there will be no cover page."
+    },
+    {
+      "name": "version",
+      "type": "string",
+      "label": "Version of the PDF",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "The version of the pdf file. Will be displayed on the cover page if existing."
+    },
+    {
       "name": "generatetoc",
       "type": "boolean",
       "label": "Generate table of contents",
