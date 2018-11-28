@@ -92,14 +92,14 @@ function convertMarkdownToHtml(filename: string, text: string): string {
 }
 
 function addCoverPage(data: string, organization: string, buildId?: string): string {
-  var now = new Date();
-  var start = new Date(now.getUTCFullYear(), 0, 0);
-  var diff = (now.valueOf() - start.valueOf()) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
-  var oneDay = 1000 * 60 * 60 * 24;
-  var dayOfYear = Math.floor(diff / oneDay);
-  var version: string = dayOfYear + '.' + now.getUTCFullYear()+'.'+ buildId; 
+  var now: Date = new Date();
+  var start: Date = new Date(now.getUTCFullYear(), 0, 0);
+  var diff: number = (now.valueOf() - start.valueOf()) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
+  var oneDay: number = 1000 * 60 * 60 * 24;
+  var dayOfYear: number = Math.floor(diff / oneDay);
+  var version: string = dayOfYear + "." + now.getUTCFullYear()+ "." + buildId;
 
-  var content: string = 
+  var content: string =
   `<div style="position: absolute;
   top: 40%;
   left: 50%;
